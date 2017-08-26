@@ -1,0 +1,11 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": {},
+  "license": "MIT",
+  "dependencies": {
+    "flat": "^2.0.1",
+    "lodash.flatten": "^4.4.0"
+  }
+}

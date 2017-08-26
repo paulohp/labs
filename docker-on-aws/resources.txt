@@ -1,0 +1,22 @@
+GroupId: sg-afa6acd0
+"InstanceId": "i-05f2cbf97428060ba",
+
+jessicas2
+
+"Endpoint": {
+    "Port": 5432,
+    "Address": "dockerzon-production.cvp3w6rk0qsh.us-east-1.rds.amazonaws.com",
+    "HostedZoneId": "Z2R2ITUGPM61AM"
+},
+
+
+"Endpoint": {
+    "Address": "dockerzon-production.9gkj57.0001.use1.cache.amazonaws.com",
+    "Port": 6379
+},
+
+"SubnetId": subnet-a717559b subnet-715eb45d subnet-3905e563 subnet-eef255a6 subnet-e7154f82
+
+{
+    "DNSName": "dockerzon-web-2077950765.us-east-1.elb.amazonaws.com"
+}
