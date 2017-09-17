@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dapp</title>
+</head>
+<body>
+
+  <h1>Interacting with Dapp</h1>
+
+  <button onclick="getCounter()">Update Counter</button>
+  <button onclick="increaseCounter()">Increase Counter</button>
+
+  <span id="myCounter"></span> Counter
+
+  <script type="text/javascript" src="web3.min.js"></script>
+  <script type="text/javascript">
+
+    const contractAddress = "0x4375E5DdFf6b4f806B7c25E860FB93345364F849";
+    const contractAbi = [ { "constant": true, "inputs": [], "name": "getCreator", "outputs": [ { "name": "", "type": "address", "value": "0x39607aa68500cdeae6ee8dc1aa4a763ddc73b46c" } ], "payable": false, "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [ { "name": "newNumber", "type": "uint256" } ], "name": "setNewNumber", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "getMyNumber", "outputs": [ { "name": "", "type": "uint256", "value": "3" } ], "payable": false, "type": "function" }, { "inputs": [], "payable": false, "type": "constructor" } ];
+
+    if (typeof web3 !== 'undefined') {
+      web3 = new Web3(web3.currentProvider);
+    } else {
+      web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+    }
+
+    const contractInstance = web3.eth.contract(contractAbi).at(contractAddress);
+
+    increaseCounter = () => {
+      contractInstance.getMyNumber((err, result) => {
+        let currentNumber = result.toNumber();
+        currentNumber++;
+        
+        web3.personal.unlockAccount("0x39607aA68500cdeAE6ee8Dc1aA4A763ddC73b46C", 'jessicas2', (err, result) => {
+          contractInstance.setNewNumber(currentNumber, { from: "0x39607aA68500cdeAE6ee8Dc1aA4A763ddC73b46C", gas: 200000 }, (err, result) => {
+            if (err) { console.error(err) }
+            else {
+              const txHash = result;
+              callWhenMined(txHash, getCounter);
+            }
+          });
+        });
+      });
+    }
+
+    callWhenMined = (txHash, callback) => {
+      web3.eth.getTransactionReceipt(txHash, (err, receipt) => {
+        if(err){console.error(err)}
+        else{
+          if(receipt === null){
+            setTimeout(function(){
+              callWhenMined(txHash, callback);
+            }, 500)
+          } else {
+            callback()
+          }
+        }
+      })
+    }
+
+    getCounter = () => {
+      contractInstance.getMyNumber((err, result) => {
+        document.getElementById('myCounter').innerText = result.toNumber();
+      });
+    }
+  </script>
+
+</body>
+</html>
